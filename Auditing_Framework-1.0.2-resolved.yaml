@@ -1,0 +1,114 @@
+---
+openapi: 3.0.0
+info:
+  title: Auditing Framework
+  description: Third version of the Auditing Framework BIECO interface
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: Antonello Calabrò
+    email: antonello.calabro@isti.cnr.it
+  license:
+    name: GPL 3.0
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.2
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://virtserver.swaggerhub.com/acalabro/Auditing_Framework_0.1/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://api.example1.com
+  description: New Server 1
+tags:
+- name: Auditing Framework
+  description: FromOrchestrator2Audit
+  externalDocs:
+    description: Auditing Framework infrastructure
+    url: https://github.com/acalabro/Concern
+paths:
+  /auditingframework/biecointerface:
+    post:
+      tags:
+      - Auditing Framework
+      summary: invoke an action described through the loaded xml
+      description: send xml containing action to execute
+      operationId: sendActionToAuditingFramework
+      requestBody:
+        content:
+          url:
+            schema:
+              $ref: '#/components/schemas/biecointerface'
+      responses:
+        "200":
+          description: done
+        "501":
+          description: error executing action
+components:
+  schemas:
+    biecointerface:
+      type: object
+      properties:
+        jobID:
+          type: string
+        timestamp:
+          type: number
+          format: double
+        messageClass:
+          type: string
+          default: request
+          enum:
+          - communication
+          - control
+          - status
+          - data
+          - request
+          - log
+          - response
+        source-ip:
+          type: string
+          default: 0.0.0.0
+        source-id:
+          type: string
+        destination-id:
+          type: string
+          enum:
+          - monitoring
+          - predictive
+        event:
+          type: string
+        accessLevel:
+          type: string
+          default: public
+          enum:
+          - private
+          - protected
+          - public
+        priority:
+          maximum: 5
+          minimum: 1
+          type: number
+          default: 5
+        crc:
+          type: number
+          format: double
+        body-format:
+          type: string
+          default: text
+          enum:
+          - text
+          - HTML
+          - JSON
+          - XML
+          - CSV
+          - BLOB
+        body-compression:
+          type: string
+          default: none
+          enum:
+          - none
+          - zip
+          - tar/gz
+        body:
+          type: string
+          default: ""
+      description: The action to execute
